@@ -4,7 +4,7 @@ class GithubTrendingRepository(
     private val remote: RemoteDataStore,
     private val localDataStore: LocalDataStore) {
 
-    fun getTrendingRepo(): Result {
+    suspend fun getTrendingRepo(): Result {
         val cache = localDataStore.getTrendingRepo()
         val isCacheExpired = localDataStore.isTrendingRepoExpired()
 
