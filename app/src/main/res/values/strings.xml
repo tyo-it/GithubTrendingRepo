@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">GithubTrendingRepo</string>
+    <string name="avatar_content_desc">author avatar</string>
 </resources>
