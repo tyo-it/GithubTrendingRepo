@@ -1,7 +1,9 @@
 package com.ittyo.githubtrendingrepo.repository
 
 import com.ittyo.githubtrendingrepo.createRepo
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockitokotlin2.doAnswer
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
