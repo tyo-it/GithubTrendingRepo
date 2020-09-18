@@ -14,22 +14,7 @@ import com.ittyo.githubtrendingrepo.R
 class TrendingRepoAdapter : RecyclerView.Adapter<TrendingRepoAdapter.ViewHolder>() {
 
     private var expandPosition = -1
-    private val repos = listOf(
-        Repo(
-            "xingshaocheng",
-            "architect-awesome",
-            "https://github.com/google.png",
-            "https://github.com/google/eleventy-high-performance-blog",
-            "go", 1, 2
-        ),
-        Repo(
-            "jhipster",
-            "generator-jhipster",
-            "https://github.com/jhipster.png",
-            "JHipster is a development platform to quickly generate, develop, & deploy modern web applications & microservice architectures.",
-            "JavaScript", 17271, 3411
-        )
-    )
+    private var repos = emptyList<Repo>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(parent.context)
@@ -64,6 +49,11 @@ class TrendingRepoAdapter : RecyclerView.Adapter<TrendingRepoAdapter.ViewHolder>
 
     override fun getItemCount(): Int {
         return repos.size
+    }
+
+    fun setTrendingRepo(repos: List<Repo>) {
+        this.repos = repos
+        notifyDataSetChanged()
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
