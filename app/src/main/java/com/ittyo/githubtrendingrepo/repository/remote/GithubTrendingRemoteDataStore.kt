@@ -5,6 +5,17 @@ import com.ittyo.githubtrendingrepo.repository.Repo
 
 class GithubTrendingRemoteDataStore(private val service: GithubTrendingService): RemoteDataStore {
     override suspend fun fetchTrendingRepo(): List<Repo> {
-        return service.getTrendingRepo()
+        return service.getTrendingRepo().map {
+            Repo(
+                author = it.author.orEmpty(),
+                name = it.name.orEmpty(),
+                avatarUrl = it.avatar.orEmpty(),
+                repositoryUrl = it.url.orEmpty(),
+                description = it.description.orEmpty(),
+                language = it.language.orEmpty(),
+                stars = it.stars,
+                forks = it.forks
+            )
+        }
     }
 }

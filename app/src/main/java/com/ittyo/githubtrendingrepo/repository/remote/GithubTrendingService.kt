@@ -10,5 +10,5 @@ interface GithubTrendingService {
         @Query("language") language: String = "",
         @Query("since") since: String = "daily",
         @Query("spoken_language_code") spokenLanguageCode: String = ""
-    ): List<Repo>
+    ): List<TrendingRepoResponse>
 }

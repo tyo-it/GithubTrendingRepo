@@ -1,5 +1,7 @@
 package com.ittyo.githubtrendingrepo.repository
 
+import android.util.Log
+
 class GithubTrendingRepository(
     private val remote: RemoteDataStore,
     private val localDataStore: LocalDataStore
@@ -15,6 +17,7 @@ class GithubTrendingRepository(
                 localDataStore.saveTrendingRepo(result)
                 Result.Success(result)
             } catch (e: Throwable) {
+                Log.e("ERROR", e.message, e)
                 Result.Failed(e)
             }
         } else {
