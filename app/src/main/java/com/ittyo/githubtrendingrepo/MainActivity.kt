@@ -15,6 +15,7 @@ import com.ittyo.githubtrendingrepo.repository.local.TrendingRepoDatabase
 import com.ittyo.githubtrendingrepo.repository.remote.GithubTrendingRemoteDataStore
 import com.ittyo.githubtrendingrepo.repository.remote.GithubTrendingServiceFactory
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.view_placeholder_failed.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -35,12 +36,23 @@ class MainActivity : AppCompatActivity() {
                 is TrendingRepoViewModel.State.Loading -> {
                     repo_recycler_view.visibility = View.GONE
                     loading_recycler_view.visibility = View.VISIBLE
+                    failed_view.visibility = View.GONE
                 }
 
                 is TrendingRepoViewModel.State.Success -> {
                     repoAdapter.setTrendingRepo(state.data)
                     repo_recycler_view.visibility = View.VISIBLE
                     loading_recycler_view.visibility = View.GONE
+                    failed_view.visibility = View.GONE
+                }
+
+                is TrendingRepoViewModel.State.Failed -> {
+                    failed_view.visibility = View.VISIBLE
+                    loading_recycler_view.visibility = View.GONE
+                    repo_recycler_view.visibility = View.GONE
+                    retry_button.setOnClickListener {
+                        viewModel.loadTrendingRepo()
+                    }
                 }
             }
         })

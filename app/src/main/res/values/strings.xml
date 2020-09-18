@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">GithubTrendingRepo</string>
     <string name="avatar_content_desc">author avatar</string>
+    <string name="failed_description">An alien is probably blocking your signal.</string>
+    <string name="failed_title">Something went wrong</string>
+    <string name="failed_image_content_description">failed image</string>
+    <string name="retry_text_button">RETRY</string>
 </resources>

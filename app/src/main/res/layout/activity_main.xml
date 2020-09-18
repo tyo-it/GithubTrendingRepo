@@ -31,4 +31,11 @@
         tools:listitem="@layout/view_item_placeholder"
         tools:visibility="gone" />
 
+    <include
+        android:id="@+id/failed_view"
+        layout="@layout/view_placeholder_failed"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:visibility="gone"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
