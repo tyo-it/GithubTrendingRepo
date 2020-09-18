@@ -22,10 +22,12 @@
 
     <TextView
         android:id="@+id/text_author"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:ellipsize="end"
         android:fontFamily="@font/roboto_family"
@@ -34,6 +36,7 @@
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@+id/image_user_avatar"
         app:layout_constraintBottom_toTopOf="@id/text_repo_name"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toEndOf="@+id/image_user_avatar"
         app:layout_constraintTop_toTopOf="parent"
@@ -41,10 +44,12 @@
 
     <TextView
         android:id="@+id/text_repo_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="6dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:ellipsize="end"
         android:fontFamily="@font/roboto_family"
@@ -52,6 +57,8 @@
         android:textColor="@color/textColor"
         android:textSize="15sp"
         app:layout_constraintBottom_toTopOf="@id/text_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/image_user_avatar"
         app:layout_constraintStart_toEndOf="@+id/image_user_avatar"
         app:layout_constraintTop_toBottomOf="@+id/text_author"
         app:layout_goneMarginBottom="16dp"
@@ -59,19 +66,22 @@
 
     <TextView
         android:id="@+id/text_description"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="160dp"
         android:ellipsize="end"
         android:maxLines="2"
         android:textSize="12sp"
         app:layout_constraintBottom_toTopOf="@id/text_language"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toEndOf="@+id/image_user_avatar"
         app:layout_constraintTop_toBottomOf="@+id/text_repo_name"
-        tools:text="Repo Detail" />
+        tools:text="JHipster is a development platform to quickly generate, develop, deploy modern web applications microservice architectures." />
 
     <TextView
         android:id="@+id/text_language"
@@ -127,6 +137,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:constraint_referenced_ids="text_description, text_language, text_stars, text_forks" />
+        app:constraint_referenced_ids="text_description, text_language, text_stars, text_forks"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
