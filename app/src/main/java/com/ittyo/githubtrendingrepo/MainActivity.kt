@@ -67,7 +67,8 @@ class MainActivity : AppCompatActivity() {
                 val remote = GithubTrendingRemoteDataStore(githubService)
 
                 val database = TrendingRepoDatabase.getInstance(context)
-                val localDataStore = GithubTrendingLocalDataStore(database)
+                val sharedPref = context.getSharedPreferences("repo", Context.MODE_PRIVATE)
+                val localDataStore = GithubTrendingLocalDataStore(database, sharedPref)
                 val repository = GithubTrendingRepository(remote, localDataStore)
                 return TrendingRepoViewModel(repository) as T
             }

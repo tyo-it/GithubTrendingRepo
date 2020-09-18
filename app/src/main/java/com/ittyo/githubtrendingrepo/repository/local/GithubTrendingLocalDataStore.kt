@@ -1,9 +1,14 @@
 package com.ittyo.githubtrendingrepo.repository.local
 
+import android.content.SharedPreferences
 import com.ittyo.githubtrendingrepo.repository.LocalDataStore
 import com.ittyo.githubtrendingrepo.repository.Repo
+import java.util.*
 
-class GithubTrendingLocalDataStore(private val database: TrendingRepoDatabase): LocalDataStore {
+const val LAST_UPDATE_TIMESTAMP_KEY = "LAST_UPDATE_TIMESTAMP_KEY"
+
+class GithubTrendingLocalDataStore(private val database: TrendingRepoDatabase,
+                                   private val sharedPref: SharedPreferences): LocalDataStore {
 
     override suspend fun getTrendingRepo(): List<Repo> {
         return database.trendingRepoDao().getTrendingRepo().map {
@@ -21,7 +26,14 @@ class GithubTrendingLocalDataStore(private val database: TrendingRepoDatabase): 
     }
 
     override suspend fun isTrendingRepoExpired(): Boolean {
-        return true
+        val timeStamp = sharedPref.getLong(LAST_UPDATE_TIMESTAMP_KEY, 0)
+        val currentTime = Date().time
+        return inHour(currentTime - timeStamp) > 2.0
+    }
+
+    private fun inHour(milis: Long): Double {
+        val hour = (1000*60*60).toDouble()
+        return milis/hour
     }
 
     override suspend fun saveTrendingRepo(repos: List<Repo>) {
@@ -39,5 +51,11 @@ class GithubTrendingLocalDataStore(private val database: TrendingRepoDatabase): 
             )
         }
         database.trendingRepoDao().insertAll(entities)
+
+        with(sharedPref.edit()) {
+            val currentTime = Date().time
+            this.putLong(LAST_UPDATE_TIMESTAMP_KEY, currentTime)
+            commit()
+        }
     }
 }
