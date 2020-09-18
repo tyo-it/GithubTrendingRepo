@@ -75,7 +75,8 @@ class MainActivity : AppCompatActivity() {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(TrendingRepoViewModel::class.java)) {
                 @Suppress("UNCHECKED_CAST")
-                val githubService = GithubTrendingServiceFactory.makeGithubService(true)
+                val baseUrl = (context.applicationContext as TrendingRepoApp).getBaseUrl()
+                val githubService = GithubTrendingServiceFactory.makeGithubService(BuildConfig.DEBUG, baseUrl)
                 val remote = GithubTrendingRemoteDataStore(githubService)
 
                 val database = TrendingRepoDatabase.getInstance(context)

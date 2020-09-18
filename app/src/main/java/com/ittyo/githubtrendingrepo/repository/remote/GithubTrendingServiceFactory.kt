@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit
 
 object GithubTrendingServiceFactory {
 
-    fun makeGithubService(isDebug: Boolean): GithubTrendingService {
+    fun makeGithubService(isDebug: Boolean, baseUrl: String): GithubTrendingService {
         val okHttpClient =
             makeOkHttpClient(
                 makeLoggingInterceptor(
@@ -18,13 +18,14 @@ object GithubTrendingServiceFactory {
             )
         return makeGithubService(
             okHttpClient,
-            Gson()
+            Gson(),
+            baseUrl
         )
     }
 
-    private fun makeGithubService(okHttpClient: OkHttpClient, gson: Gson): GithubTrendingService {
+    private fun makeGithubService(okHttpClient: OkHttpClient, gson: Gson, baseUrl: String): GithubTrendingService {
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://ghapi.huchen.dev/")
+            .baseUrl(baseUrl)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
