@@ -2,7 +2,7 @@ package com.ittyo.githubtrendingrepo.repository
 
 interface LocalDataStore {
 
-    fun getTrendingRepo(): List<Repo>
-    fun isTrendingRepoExpired(): Boolean
-    fun saveTrendingRepo(repos: List<Repo>)
+    suspend fun getTrendingRepo(): List<Repo>
+    suspend fun isTrendingRepoExpired(): Boolean
+    suspend fun saveTrendingRepo(repos: List<Repo>)
 }

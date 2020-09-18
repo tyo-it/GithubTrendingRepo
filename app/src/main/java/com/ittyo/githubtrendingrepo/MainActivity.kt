@@ -1,5 +1,6 @@
 package com.ittyo.githubtrendingrepo
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -9,8 +10,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ittyo.githubtrendingrepo.repository.GithubTrendingRepository
-import com.ittyo.githubtrendingrepo.repository.LocalDataStore
-import com.ittyo.githubtrendingrepo.repository.Repo
+import com.ittyo.githubtrendingrepo.repository.local.GithubTrendingLocalDataStore
+import com.ittyo.githubtrendingrepo.repository.local.TrendingRepoDatabase
 import com.ittyo.githubtrendingrepo.repository.remote.GithubTrendingRemoteDataStore
 import com.ittyo.githubtrendingrepo.repository.remote.GithubTrendingServiceFactory
 import kotlinx.android.synthetic.main.activity_main.*
@@ -26,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        viewModel = ViewModelProvider(this, ViewModelFactory())
+        viewModel = ViewModelProvider(this, ViewModelFactory(this))
             .get(TrendingRepoViewModel::class.java)
 
         viewModel.stateLiveData.observe(this, Observer { state ->
@@ -58,24 +59,15 @@ class MainActivity : AppCompatActivity() {
         viewModel.loadTrendingRepo()
     }
 
-    class ViewModelFactory : ViewModelProvider.Factory {
+    class ViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(TrendingRepoViewModel::class.java)) {
                 @Suppress("UNCHECKED_CAST")
                 val githubService = GithubTrendingServiceFactory.makeGithubService(true)
                 val remote = GithubTrendingRemoteDataStore(githubService)
-                val localDataStore = object : LocalDataStore {
-                    override fun getTrendingRepo(): List<Repo> {
-                        return emptyList()
-                    }
 
-                    override fun saveTrendingRepo(repos: List<Repo>) {
-                    }
-
-                    override fun isTrendingRepoExpired(): Boolean {
-                        return true
-                    }
-                }
+                val database = TrendingRepoDatabase.getInstance(context)
+                val localDataStore = GithubTrendingLocalDataStore(database)
                 val repository = GithubTrendingRepository(remote, localDataStore)
                 return TrendingRepoViewModel(repository) as T
             }
