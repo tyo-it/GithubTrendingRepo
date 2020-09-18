@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.ittyo.githubtrendingrepo.repository.GithubTrendingRepository
 import com.ittyo.githubtrendingrepo.repository.LocalDataStore
 import com.ittyo.githubtrendingrepo.repository.Repo
-import com.ittyo.githubtrendingrepo.repository.TrendingRepoAdapter
 import com.ittyo.githubtrendingrepo.repository.remote.GithubTrendingRemoteDataStore
 import com.ittyo.githubtrendingrepo.repository.remote.GithubTrendingServiceFactory
 import kotlinx.android.synthetic.main.activity_main.*

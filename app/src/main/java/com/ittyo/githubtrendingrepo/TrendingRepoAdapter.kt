@@ -1,4 +1,4 @@
-package com.ittyo.githubtrendingrepo.repository
+package com.ittyo.githubtrendingrepo
 
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +9,7 @@ import androidx.constraintlayout.widget.Group
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.ittyo.githubtrendingrepo.R
+import com.ittyo.githubtrendingrepo.repository.Repo
 
 class TrendingRepoAdapter : RecyclerView.Adapter<TrendingRepoAdapter.ViewHolder>() {
 
