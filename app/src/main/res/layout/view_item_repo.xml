@@ -14,11 +14,11 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
+        android:contentDescription="@string/avatar_content_desc"
         android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:background="@mipmap/ic_launcher_round"
-        android:contentDescription="@string/avatar_content_desc"/>
+        tools:background="@mipmap/ic_launcher_round" />
 
     <TextView
         android:id="@+id/text_author"
@@ -51,14 +51,14 @@
         android:maxLines="1"
         android:textColor="@color/textColor"
         android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="@+id/image_user_avatar"
-        app:layout_constraintBottom_toTopOf="@id/text_detail"
+        app:layout_constraintBottom_toTopOf="@id/text_description"
         app:layout_constraintStart_toEndOf="@+id/image_user_avatar"
         app:layout_constraintTop_toBottomOf="@+id/text_author"
+        app:layout_goneMarginBottom="16dp"
         tools:text="Repository" />
 
     <TextView
-        android:id="@+id/text_detail"
+        android:id="@+id/text_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
@@ -77,49 +77,56 @@
         android:id="@+id/text_language"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp"
-        android:layout_marginStart="16dp"
-        app:drawableLeftCompat="@drawable/circle_red"
         android:drawablePadding="4dp"
         android:textSize="12sp"
+        app:drawableLeftCompat="@drawable/circle_red"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/image_user_avatar"
-        app:layout_constraintTop_toBottomOf="@+id/text_detail"
+        app:layout_constraintTop_toBottomOf="@+id/text_description"
         tools:text="Kotlin" />
 
     <TextView
         android:id="@+id/text_stars"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp"
-        app:drawableLeftCompat="@drawable/star_yellow"
         android:drawablePadding="4dp"
         android:textSize="12sp"
+        app:drawableLeftCompat="@drawable/star_yellow"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/text_language"
-        app:layout_constraintTop_toBottomOf="@+id/text_detail"
+        app:layout_constraintTop_toBottomOf="@+id/text_description"
         tools:text="Stars" />
 
     <TextView
         android:id="@+id/text_forks"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp"
-        app:drawableStartCompat="@drawable/fork_black"
-        app:drawableLeftCompat="@drawable/fork_black"
         android:drawablePadding="4dp"
         android:textSize="12sp"
+        app:drawableLeftCompat="@drawable/fork_black"
+        app:drawableStartCompat="@drawable/fork_black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/text_stars"
-        app:layout_constraintTop_toBottomOf="@+id/text_detail"
+        app:layout_constraintTop_toBottomOf="@+id/text_description"
         tools:text="4376" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/repo_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="text_description, text_language, text_stars, text_forks" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,7 +2,8 @@ package com.ittyo.githubtrendingrepo.repository
 
 class GithubTrendingRepository(
     private val remote: RemoteDataStore,
-    private val localDataStore: LocalDataStore) {
+    private val localDataStore: LocalDataStore
+) {
 
     suspend fun getTrendingRepo(): Result {
         val cache = localDataStore.getTrendingRepo()
@@ -17,7 +18,7 @@ class GithubTrendingRepository(
                 Result.Failed(e)
             }
         } else {
-            return Result.Success(cache)
+            Result.Success(cache)
         }
     }
 }

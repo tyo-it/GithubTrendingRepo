@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.Group
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -12,6 +13,7 @@ import com.ittyo.githubtrendingrepo.R
 
 class TrendingRepoAdapter : RecyclerView.Adapter<TrendingRepoAdapter.ViewHolder>() {
 
+    private var expandPosition = -1
     private val repos = listOf(
         Repo(
             "xingshaocheng",
@@ -19,6 +21,13 @@ class TrendingRepoAdapter : RecyclerView.Adapter<TrendingRepoAdapter.ViewHolder>
             "https://github.com/google.png",
             "https://github.com/google/eleventy-high-performance-blog",
             "go", 1, 2
+        ),
+        Repo(
+            "jhipster",
+            "generator-jhipster",
+            "https://github.com/jhipster.png",
+            "JHipster is a development platform to quickly generate, develop, & deploy modern web applications & microservice architectures.",
+            "JavaScript", 17271, 3411
         )
     )
 
@@ -30,10 +39,18 @@ class TrendingRepoAdapter : RecyclerView.Adapter<TrendingRepoAdapter.ViewHolder>
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val repo = repos[position]
+        holder.itemView.setOnClickListener {
+            val prevExpandPosition = expandPosition
+            val newExpandPosition = if (expandPosition == position) -1 else position
+            notifyItemChanged(prevExpandPosition)
+            notifyItemChanged(newExpandPosition)
+            expandPosition = newExpandPosition
+        }
+
         holder.authorName.text = repo.author
         holder.repoName.text = repo.name
         holder.language.text = repo.language
-        holder.repoDetail.text = repo.description
+        holder.description.text = repo.description
         holder.stars.text = repo.stars.toString()
         holder.forks.text = repo.forks.toString()
 
@@ -41,6 +58,8 @@ class TrendingRepoAdapter : RecyclerView.Adapter<TrendingRepoAdapter.ViewHolder>
             .load(repo.avatarUrl)
             .apply(RequestOptions.circleCropTransform())
             .into(holder.avatarImage)
+
+        holder.repoDetail.visibility = if (expandPosition == position) View.VISIBLE else View.GONE
     }
 
     override fun getItemCount(): Int {
@@ -51,9 +70,10 @@ class TrendingRepoAdapter : RecyclerView.Adapter<TrendingRepoAdapter.ViewHolder>
         var authorName: TextView = view.findViewById(R.id.text_author)
         var repoName: TextView = view.findViewById(R.id.text_repo_name)
         var avatarImage: ImageView = view.findViewById(R.id.image_user_avatar)
-        var repoDetail: TextView = view.findViewById(R.id.text_detail)
+        var description: TextView = view.findViewById(R.id.text_description)
         var language: TextView = view.findViewById(R.id.text_language)
         var stars: TextView = view.findViewById(R.id.text_stars)
         var forks: TextView = view.findViewById(R.id.text_forks)
+        var repoDetail: Group = view.findViewById(R.id.repo_detail)
     }
 }
