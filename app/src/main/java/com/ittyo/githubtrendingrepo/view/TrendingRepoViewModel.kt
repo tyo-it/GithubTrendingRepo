@@ -1,4 +1,4 @@
-package com.ittyo.githubtrendingrepo
+package com.ittyo.githubtrendingrepo.view
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

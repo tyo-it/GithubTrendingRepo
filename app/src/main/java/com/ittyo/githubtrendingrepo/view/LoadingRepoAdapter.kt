@@ -1,9 +1,10 @@
-package com.ittyo.githubtrendingrepo
+package com.ittyo.githubtrendingrepo.view
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.ittyo.githubtrendingrepo.R
 
 class LoadingRepoAdapter: RecyclerView.Adapter<LoadingRepoAdapter.ViewHolder>() {
 

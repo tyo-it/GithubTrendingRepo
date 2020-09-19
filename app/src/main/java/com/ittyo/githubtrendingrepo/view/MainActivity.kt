@@ -1,4 +1,4 @@
-package com.ittyo.githubtrendingrepo
+package com.ittyo.githubtrendingrepo.view
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.ittyo.githubtrendingrepo.*
 import com.ittyo.githubtrendingrepo.repository.GithubTrendingRepository
 import com.ittyo.githubtrendingrepo.repository.local.GithubTrendingLocalDataStore
 import com.ittyo.githubtrendingrepo.repository.local.TrendingRepoDatabase

@@ -8,8 +8,8 @@ import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
+import com.ittyo.githubtrendingrepo.view.MainActivity
 import com.jakewharton.espresso.OkHttp3IdlingResource
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.Dispatcher
