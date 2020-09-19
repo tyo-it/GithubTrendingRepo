@@ -12,9 +12,10 @@ fun createRepo(
     repositoryUrl: String = "repositoryUrl",
     description: String = "description",
     language: String = "language",
+    languageColor: String = "#000000",
     stars: Int = 0,
     forks: Int = 0
-) = Repo(author, name, avatarUrl, repositoryUrl, description, language, stars, forks)
+) = Repo(author, name, avatarUrl, repositoryUrl, description, language, languageColor, stars, forks)
 
 fun initializeClock(currentTime: LocalDateTime): Clock {
     val zone = ZoneId.systemDefault()
