@@ -1,8 +1,9 @@
-package com.ittyo.githubtrendingrepo
+package com.ittyo.githubtrendingrepo.util
 
 import android.app.Application
 import android.content.Context
 import androidx.test.runner.AndroidJUnitRunner
+import com.ittyo.githubtrendingrepo.TrendingRepoTestApp
 
 class MockTestRunner : AndroidJUnitRunner() {
 

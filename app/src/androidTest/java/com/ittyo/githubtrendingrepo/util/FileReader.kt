@@ -1,6 +1,7 @@
-package com.ittyo.githubtrendingrepo
+package com.ittyo.githubtrendingrepo.util
 
 import androidx.test.platform.app.InstrumentationRegistry
+import com.ittyo.githubtrendingrepo.TrendingRepoTestApp
 import java.io.IOException
 import java.io.InputStreamReader
 
