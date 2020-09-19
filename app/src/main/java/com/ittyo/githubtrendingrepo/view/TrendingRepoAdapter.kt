@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.Group
+import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -46,6 +47,7 @@ class TrendingRepoAdapter : RecyclerView.Adapter<TrendingRepoAdapter.ViewHolder>
             .into(holder.avatarImage)
 
         holder.repoDetail.visibility = if (expandPosition == position) View.VISIBLE else View.GONE
+        ViewCompat.setTranslationZ(holder.itemView, if (expandPosition == position) 5f else 0f)
     }
 
     override fun getItemCount(): Int {
