@@ -15,7 +15,7 @@ import com.ittyo.githubtrendingrepo.repository.Repo
 
 class TrendingRepoAdapter : RecyclerView.Adapter<TrendingRepoAdapter.ViewHolder>() {
 
-    private var expandPosition = -1
+    var expandPosition = -1
     private var repos = emptyList<Repo>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

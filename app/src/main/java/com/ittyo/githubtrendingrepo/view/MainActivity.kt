@@ -21,6 +21,10 @@ import org.threeten.bp.Clock
 
 class MainActivity : AppCompatActivity() {
 
+    companion object {
+        const val EXPAND_POSITION_KEY = "expand_position"
+    }
+
     private lateinit var viewModel: TrendingRepoViewModel
 
     private val repoAdapter = TrendingRepoAdapter()
@@ -73,6 +77,16 @@ class MainActivity : AppCompatActivity() {
         viewModel.loadTrendingRepo()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(EXPAND_POSITION_KEY, repoAdapter.expandPosition)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        repoAdapter.expandPosition = savedInstanceState.getInt(EXPAND_POSITION_KEY, -1)
+    }
+
     private fun setupAppbar() {
         setSupportActionBar(toolbar)
         // we don't need actionbar title because we use textView to show title on the middle
@@ -106,13 +120,15 @@ class MainActivity : AppCompatActivity() {
             if (modelClass.isAssignableFrom(TrendingRepoViewModel::class.java)) {
                 @Suppress("UNCHECKED_CAST")
                 val baseUrl = (context.applicationContext as TrendingRepoApp).getBaseUrl()
-                val githubService = GithubTrendingServiceFactory.makeGithubService(BuildConfig.DEBUG, baseUrl)
+                val githubService =
+                    GithubTrendingServiceFactory.makeGithubService(BuildConfig.DEBUG, baseUrl)
                 val remote = GithubTrendingRemoteDataStore(githubService)
 
                 val database = TrendingRepoDatabase.getInstance(context)
                 val sharedPref = context.getSharedPreferences("repo", Context.MODE_PRIVATE)
                 val localDataStore = GithubTrendingLocalDataStore(database, sharedPref)
-                val repository = GithubTrendingRepository(remote, localDataStore, Clock.systemDefaultZone())
+                val repository =
+                    GithubTrendingRepository(remote, localDataStore, Clock.systemDefaultZone())
                 return TrendingRepoViewModel(repository) as T
             }
             throw IllegalArgumentException("Unknown ViewModel class")
