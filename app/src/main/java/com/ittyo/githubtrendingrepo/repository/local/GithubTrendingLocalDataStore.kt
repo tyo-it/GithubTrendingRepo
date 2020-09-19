@@ -39,6 +39,7 @@ class GithubTrendingLocalDataStore(private val database: TrendingRepoDatabase,
                 forks = it.forks
             )
         }
+        database.trendingRepoDao().deleteAll()
         database.trendingRepoDao().insertAll(entities)
         setTrendingRepoLastUpdate(currentTime)
     }
