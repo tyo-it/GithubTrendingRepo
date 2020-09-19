@@ -12,10 +12,10 @@ class TrendingRepoViewModel(private val repository: GithubTrendingRepository): V
 
     val stateLiveData = MutableLiveData<State>()
 
-    fun loadTrendingRepo() {
+    fun loadTrendingRepo(forceFetch: Boolean = false) {
         viewModelScope.launch {
             stateLiveData.value = State.Loading
-            val result = repository.getTrendingRepo()
+            val result = repository.getTrendingRepo(forceFetch)
             stateLiveData.value = when(result) {
                 is Result.Success -> State.Success(result.data)
                 is Result.Failed -> State.Failed

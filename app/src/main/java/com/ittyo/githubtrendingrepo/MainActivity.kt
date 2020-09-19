@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
         loading_recycler_view.visibility = View.GONE
 
         repo_recycler_view_container.setOnRefreshListener {
-            viewModel.loadTrendingRepo()
+            viewModel.loadTrendingRepo(forceFetch = true)
         }
 
         viewModel.loadTrendingRepo()

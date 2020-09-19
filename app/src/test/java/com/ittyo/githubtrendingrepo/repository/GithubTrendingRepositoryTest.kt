@@ -26,6 +26,9 @@ class GithubTrendingRepositoryTest {
     fun init() {
         MockitoAnnotations.initMocks(this)
         repository = GithubTrendingRepository(remote, localCache)
+        runBlocking {
+            whenever(localCache.isTrendingRepoExpired()).thenReturn(false)
+        }
     }
 
     @Test
@@ -35,7 +38,7 @@ class GithubTrendingRepositoryTest {
             whenever(localCache.getTrendingRepo()).thenReturn(emptyList())
             whenever(remote.fetchTrendingRepo()).thenReturn(fetchResult)
 
-            val result = repository.getTrendingRepo()
+            val result = repository.getTrendingRepo(false)
 
             assertEquals(Result.Success(fetchResult), result)
         }
@@ -49,7 +52,7 @@ class GithubTrendingRepositoryTest {
             whenever(localCache.isTrendingRepoExpired()).thenReturn(true)
             whenever(remote.fetchTrendingRepo()).thenReturn(fetchResult)
 
-            val result = repository.getTrendingRepo()
+            val result = repository.getTrendingRepo(false)
 
             assertEquals(Result.Success(fetchResult), result)
         }
@@ -62,7 +65,7 @@ class GithubTrendingRepositoryTest {
             whenever(localCache.getTrendingRepo()).thenReturn(caches)
             whenever(localCache.isTrendingRepoExpired()).thenReturn(false)
 
-            val result = repository.getTrendingRepo()
+            val result = repository.getTrendingRepo(false)
 
             assertEquals(Result.Success(caches), result)
         }
@@ -75,7 +78,7 @@ class GithubTrendingRepositoryTest {
             whenever(localCache.getTrendingRepo()).thenReturn(emptyList())
             doAnswer { throw fetchError }.whenever(remote).fetchTrendingRepo()
 
-            val result = repository.getTrendingRepo()
+            val result = repository.getTrendingRepo(false)
 
             assertEquals(Result.Failed(fetchError), result)
         }
@@ -88,9 +91,23 @@ class GithubTrendingRepositoryTest {
             whenever(localCache.getTrendingRepo()).thenReturn(emptyList())
             whenever(remote.fetchTrendingRepo()).thenReturn(fetchResult)
 
-            repository.getTrendingRepo()
+            repository.getTrendingRepo(false)
 
             verify(localCache).saveTrendingRepo(fetchResult)
+        }
+    }
+
+    @Test
+    fun `when force fetch is true should fetch from remote`() {
+        runBlocking {
+            val cacheResult = listOf(createRepo("cache"))
+            val fetchResult = listOf(createRepo("ittyo"))
+            whenever(localCache.getTrendingRepo()).thenReturn(cacheResult)
+            whenever(remote.fetchTrendingRepo()).thenReturn(fetchResult)
+
+            val result = repository.getTrendingRepo(true)
+
+            assertEquals(Result.Success(fetchResult), result)
         }
     }
 }
