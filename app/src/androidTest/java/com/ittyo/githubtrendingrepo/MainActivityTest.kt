@@ -18,7 +18,6 @@ import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.*
 import org.junit.runner.RunWith
-import java.util.concurrent.TimeUnit
 
 @RunWith(AndroidJUnit4::class)
 class MainActivityTest {
@@ -38,19 +37,6 @@ class MainActivityTest {
     @After
     fun teardown() {
         mockWebServer.shutdown()
-    }
-
-    @Test
-    fun showLoadingView_OnWaitingRequestResponse() {
-        val successResponse = MockResponse().setHttp2ErrorCode(404).setBody("")
-            .throttleBody(1024, 1, TimeUnit.SECONDS)
-        mockWebServer.enqueue(successResponse)
-
-        activityRule.launchActivity(null)
-
-        Thread.sleep(1000)
-
-        checkLoadingIsShown()
     }
 
     @Test
