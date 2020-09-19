@@ -3,6 +3,7 @@ package com.ittyo.githubtrendingrepo
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.swipeDown
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
@@ -135,4 +136,34 @@ class MainActivityTest {
             matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
     }
 
+    @Test
+    fun whenSwipeOnRepoList_willStartNewRequest() {
+        val failedResponse = MockResponse().setHttp2ErrorCode(404).setBody("")
+        val successResponse = MockResponse().setResponseCode(200).setBody(
+            FileReader.readStringFromFile("success_response.json"))
+        mockWebServer.enqueue(successResponse)
+        mockWebServer.enqueue(failedResponse)
+
+        activityRule.launchActivity(null)
+
+        Thread.sleep(1000)
+
+        onView(withId(R.id.loading_recycler_view)).check(
+            matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+        onView(withId(R.id.failed_view)).check(
+            matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+        onView(withId(R.id.repo_recycler_view)).check(
+            matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+
+        onView(withId(R.id.repo_recycler_view_container)).perform(swipeDown())
+
+        Thread.sleep(1000)
+
+        onView(withId(R.id.loading_recycler_view)).check(
+            matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+        onView(withId(R.id.failed_view)).check(
+            matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+        onView(withId(R.id.repo_recycler_view)).check(
+            matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+    }
 }
