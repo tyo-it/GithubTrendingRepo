@@ -3,9 +3,9 @@ package com.ittyo.githubtrendingrepo.repository.local
 import android.content.SharedPreferences
 import com.ittyo.githubtrendingrepo.repository.LocalDataStore
 import com.ittyo.githubtrendingrepo.repository.Repo
-import java.util.*
+import org.threeten.bp.*
 
-const val LAST_UPDATE_TIMESTAMP_KEY = "LAST_UPDATE_TIMESTAMP_KEY"
+const val LAST_UPDATE_TIME_KEY = "LAST_UPDATE_TIMESTAMP_KEY"
 
 class GithubTrendingLocalDataStore(private val database: TrendingRepoDatabase,
                                    private val sharedPref: SharedPreferences): LocalDataStore {
@@ -26,14 +26,10 @@ class GithubTrendingLocalDataStore(private val database: TrendingRepoDatabase,
     }
 
     override suspend fun isTrendingRepoExpired(): Boolean {
-        val timeStamp = sharedPref.getLong(LAST_UPDATE_TIMESTAMP_KEY, 0)
-        val currentTime = Date().time
-        return inHour(currentTime - timeStamp) > 2.0
-    }
-
-    private fun inHour(milis: Long): Double {
-        val hour = (1000*60*60).toDouble()
-        return milis/hour
+        val timeStamp = sharedPref.getString(LAST_UPDATE_TIME_KEY, "1970-01-01T07:00")
+        val lastUpdateTime = LocalDateTime.parse(timeStamp)
+        val currentTime = LocalDateTime.now()
+        return Duration.between(lastUpdateTime, currentTime).toMinutes() > 120
     }
 
     override suspend fun saveTrendingRepo(repos: List<Repo>) {
@@ -53,8 +49,8 @@ class GithubTrendingLocalDataStore(private val database: TrendingRepoDatabase,
         database.trendingRepoDao().insertAll(entities)
 
         with(sharedPref.edit()) {
-            val currentTime = Date().time
-            this.putLong(LAST_UPDATE_TIMESTAMP_KEY, currentTime)
+            val currentTime = LocalDateTime.now()
+            this.putString(LAST_UPDATE_TIME_KEY, currentTime.toString())
             commit()
         }
     }
