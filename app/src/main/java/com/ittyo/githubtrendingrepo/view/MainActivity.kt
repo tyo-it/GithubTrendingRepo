@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        setSupportActionBar(toolbar)
+        setupAppbar()
 
         val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
 
@@ -71,6 +71,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewModel.loadTrendingRepo()
+    }
+
+    private fun setupAppbar() {
+        setSupportActionBar(toolbar)
+        // we don't need actionbar title because we use textView to show title on the middle
+        supportActionBar?.title = ""
     }
 
     private fun showTrendingReposView() {
