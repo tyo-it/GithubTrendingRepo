@@ -36,7 +36,7 @@ class TrendingRepoAdapter : RecyclerView.Adapter<TrendingRepoAdapter.ViewHolder>
         holder.authorName.text = repo.author
         holder.repoName.text = repo.name
         holder.language.text = repo.language
-        holder.description.text = repo.description
+        holder.description.text = "${repo.description}(${repo.repositoryUrl})"
         holder.stars.text = repo.stars.toString()
         holder.forks.text = repo.forks.toString()
 
