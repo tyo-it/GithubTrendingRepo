@@ -39,9 +39,12 @@ class GithubTrendingLocalDataStore(private val database: TrendingRepoDatabase,
                 forks = it.forks
             )
         }
-        database.trendingRepoDao().deleteAll()
         database.trendingRepoDao().insertAll(entities)
         setTrendingRepoLastUpdate(currentTime)
+    }
+
+    override suspend fun clearTrendingRepo() {
+        database.trendingRepoDao().deleteAll()
     }
 
     override fun getTrendingRepoLastUpdate(): LocalDateTime {

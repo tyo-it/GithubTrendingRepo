@@ -17,6 +17,7 @@ class GithubTrendingRepository(
             try {
                 val result = remote.fetchTrendingRepo()
                 val currentTime = LocalDateTime.now(clock)
+                localDataStore.clearTrendingRepo()
                 localDataStore.saveTrendingRepo(result, currentTime)
                 Result.Success(result)
             } catch (e: Throwable) {

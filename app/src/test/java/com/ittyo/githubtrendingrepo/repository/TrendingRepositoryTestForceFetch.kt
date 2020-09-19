@@ -3,8 +3,7 @@ package com.ittyo.githubtrendingrepo.repository
 import com.ittyo.githubtrendingrepo.TestApp
 import com.ittyo.githubtrendingrepo.createRepo
 import com.ittyo.githubtrendingrepo.initializeClock
-import com.nhaarman.mockitokotlin2.doAnswer
-import com.nhaarman.mockitokotlin2.whenever
+import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -27,12 +26,13 @@ class TrendingRepositoryTestForceFetch {
     @Mock
     lateinit var localCache: LocalDataStore
 
-    lateinit var repository: GithubTrendingRepository
+    private val currentTime = LocalDateTime.of(2020, 2, 2, 12, 0)
+
+    private lateinit var repository: GithubTrendingRepository
 
     @Before
     fun init() {
         MockitoAnnotations.initMocks(this)
-        val currentTime = LocalDateTime.of(2020,2, 2,12, 0)
         val clock = initializeClock(currentTime)
         repository = GithubTrendingRepository(remote, localCache, clock)
         runBlocking {
@@ -61,6 +61,20 @@ class TrendingRepositoryTestForceFetch {
             val result = repository.getTrendingRepo(true)
 
             assertEquals(Result.Failed(fetchError), result)
+        }
+    }
+
+    @Test
+    fun `should clear the cache before save the success result`() {
+        runBlocking {
+            val fetchResult = listOf(createRepo("ittyo"))
+            whenever(remote.fetchTrendingRepo()).thenReturn(fetchResult)
+
+            repository.getTrendingRepo(true)
+
+            inOrder(localCache)
+            verify(localCache, times(1)).clearTrendingRepo()
+            verify(localCache, times(1)).saveTrendingRepo(fetchResult, currentTime)
         }
     }
 }
