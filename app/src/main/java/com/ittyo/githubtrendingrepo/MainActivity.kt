@@ -34,22 +34,16 @@ class MainActivity : AppCompatActivity() {
         viewModel.stateLiveData.observe(this, Observer { state ->
             when (state) {
                 is TrendingRepoViewModel.State.Loading -> {
-                    repo_recycler_view.visibility = View.GONE
-                    loading_recycler_view.visibility = View.VISIBLE
-                    failed_view.visibility = View.GONE
+                    showLoadingView()
                 }
 
                 is TrendingRepoViewModel.State.Success -> {
                     repoAdapter.setTrendingRepo(state.data)
-                    repo_recycler_view.visibility = View.VISIBLE
-                    loading_recycler_view.visibility = View.GONE
-                    failed_view.visibility = View.GONE
+                    showTrendingReposView()
                 }
 
                 is TrendingRepoViewModel.State.Failed -> {
-                    failed_view.visibility = View.VISIBLE
-                    loading_recycler_view.visibility = View.GONE
-                    repo_recycler_view.visibility = View.GONE
+                    showFailedLoadView()
                     retry_button.setOnClickListener {
                         viewModel.loadTrendingRepo()
                     }
@@ -68,7 +62,33 @@ class MainActivity : AppCompatActivity() {
         loading_recycler_view.adapter = loadingAdapter
         loading_recycler_view.visibility = View.GONE
 
+        repo_recycler_view_container.setOnRefreshListener {
+            viewModel.loadTrendingRepo()
+        }
+
         viewModel.loadTrendingRepo()
+    }
+
+    private fun showTrendingReposView() {
+        repo_recycler_view_container.isRefreshing = false
+        repo_recycler_view_container.visibility = View.VISIBLE
+        loading_recycler_view.visibility = View.GONE
+        repo_recycler_view.visibility = View.VISIBLE
+        failed_view.visibility = View.GONE
+    }
+
+    private fun showLoadingView() {
+        repo_recycler_view_container.visibility = View.VISIBLE
+        loading_recycler_view.visibility = View.VISIBLE
+        repo_recycler_view.visibility = View.INVISIBLE
+        failed_view.visibility = View.GONE
+    }
+
+    private fun showFailedLoadView() {
+        failed_view.visibility = View.VISIBLE
+        loading_recycler_view.visibility = View.GONE
+        repo_recycler_view_container.visibility = View.GONE
+        repo_recycler_view_container.isRefreshing = false
     }
 
     class ViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
