@@ -21,6 +21,9 @@ data class TrendingRepoResponse(
     @SerializedName("language")
     val language: String?,
 
+    @SerializedName("languageColor")
+    val languageColor: String?,
+
     @SerializedName("stars")
     val stars: Int,
 

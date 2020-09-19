@@ -1,11 +1,13 @@
 package com.ittyo.githubtrendingrepo.view
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.Group
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -41,6 +43,7 @@ class TrendingRepoAdapter : RecyclerView.Adapter<TrendingRepoAdapter.ViewHolder>
         holder.stars.text = repo.stars.toString()
         holder.forks.text = repo.forks.toString()
 
+        setLanguageDrawableColor(holder, repo.languageColor)
         Glide.with(holder.itemView.context)
             .load(repo.avatarUrl)
             .apply(RequestOptions.circleCropTransform())
@@ -48,6 +51,12 @@ class TrendingRepoAdapter : RecyclerView.Adapter<TrendingRepoAdapter.ViewHolder>
 
         holder.repoDetail.visibility = if (expandPosition == position) View.VISIBLE else View.GONE
         ViewCompat.setTranslationZ(holder.itemView, if (expandPosition == position) 5f else 0f)
+    }
+
+    private fun setLanguageDrawableColor(holder: ViewHolder, colorString: String) {
+        val languageDrawable = holder.language.compoundDrawables[0]
+        val languageColor = Color.parseColor(colorString)
+        DrawableCompat.setTint(languageDrawable, languageColor)
     }
 
     override fun getItemCount(): Int {

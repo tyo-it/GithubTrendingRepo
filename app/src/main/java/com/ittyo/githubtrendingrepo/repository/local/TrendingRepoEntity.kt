@@ -28,6 +28,9 @@ data class TrendingRepoEntity (
     @ColumnInfo(name = "language")
     val language: String?,
 
+    @ColumnInfo(name = "language_color")
+    val languageColor: String?,
+
     @ColumnInfo(name = "stars")
     val stars: Int,
 

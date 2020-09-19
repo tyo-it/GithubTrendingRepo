@@ -13,6 +13,7 @@ class GithubTrendingRemoteDataStore(private val service: GithubTrendingService):
                 repositoryUrl = it.url.orEmpty(),
                 description = it.description.orEmpty(),
                 language = it.language.orEmpty(),
+                languageColor = it.languageColor.orEmpty(),
                 stars = it.stars,
                 forks = it.forks
             )

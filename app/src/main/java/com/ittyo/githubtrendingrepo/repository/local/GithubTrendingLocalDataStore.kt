@@ -19,6 +19,7 @@ class GithubTrendingLocalDataStore(private val database: TrendingRepoDatabase,
                 repositoryUrl = it.url.orEmpty(),
                 description = it.description.orEmpty(),
                 language = it.language.orEmpty(),
+                languageColor = it.languageColor.orEmpty(),
                 stars = it.stars,
                 forks = it.forks
             )
@@ -35,6 +36,7 @@ class GithubTrendingLocalDataStore(private val database: TrendingRepoDatabase,
                 url = it.repositoryUrl,
                 description = it.description,
                 language = it.language,
+                languageColor = it.languageColor,
                 stars = it.stars,
                 forks = it.forks
             )
