@@ -18,7 +18,6 @@ import com.ittyo.githubtrendingrepo.repository.remote.GithubTrendingServiceFacto
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.view_placeholder_failed.*
 import org.threeten.bp.Clock
-import org.threeten.bp.ZoneId
 
 class MainActivity : AppCompatActivity() {
 
@@ -53,6 +52,8 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
+
+        setSupportActionBar(toolbar)
 
         val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
 
