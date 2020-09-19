@@ -14,14 +14,9 @@ import com.ittyo.githubtrendingrepo.util.FileReader
 import com.ittyo.githubtrendingrepo.view.MainActivity
 import com.jakewharton.espresso.OkHttp3IdlingResource
 import okhttp3.OkHttpClient
-import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
-import okhttp3.mockwebserver.RecordedRequest
-import org.junit.After
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import org.junit.*
 import org.junit.runner.RunWith
 import java.util.concurrent.TimeUnit
 
@@ -47,63 +42,39 @@ class MainActivityTest {
 
     @Test
     fun showLoadingView_OnWaitingRequestResponse() {
-        mockWebServer.dispatcher = object : Dispatcher() {
-            override fun dispatch(request: RecordedRequest): MockResponse {
-                return MockResponse()
-                    .setResponseCode(200)
-                    .setBody(FileReader.readStringFromFile("success_response.json"))
-                    .throttleBody(1024, 5, TimeUnit.SECONDS)
-            }
-        }
+        val successResponse = MockResponse().setHttp2ErrorCode(404).setBody("")
+            .throttleBody(1024, 1, TimeUnit.SECONDS)
+        mockWebServer.enqueue(successResponse)
 
         activityRule.launchActivity(null)
+
         Thread.sleep(1000)
-        onView(withId(R.id.loading_recycler_view)).check(
-            matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
-        onView(withId(R.id.failed_view)).check(
-            matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
-        onView(withId(R.id.repo_recycler_view)).check(
-            matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+
+        checkLoadingIsShown()
     }
 
     @Test
     fun showRepoRecycleView_OnSuccessfulRequest() {
-        mockWebServer.dispatcher = object : Dispatcher() {
-            override fun dispatch(request: RecordedRequest): MockResponse {
-                return MockResponse()
-                    .setResponseCode(200)
-                    .setBody(FileReader.readStringFromFile("success_response.json"))
-            }
-        }
+        val successResponse = MockResponse().setResponseCode(200).setBody(
+            FileReader.readStringFromFile("success_response.json"))
+        mockWebServer.enqueue(successResponse)
 
         activityRule.launchActivity(null)
         Thread.sleep(1000)
-        onView(withId(R.id.loading_recycler_view)).check(
-            matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
-        onView(withId(R.id.failed_view)).check(
-            matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
-        onView(withId(R.id.repo_recycler_view)).check(
-            matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+
+        checkSuccessResultIsShown()
     }
 
     @Test
     fun showFailedView_OnFailedRequest() {
-        mockWebServer.dispatcher = object : Dispatcher() {
-            override fun dispatch(request: RecordedRequest): MockResponse {
-                return MockResponse()
-                    .setHttp2ErrorCode(404)
-                    .setBody("")
-            }
-        }
+        val failedResponse = MockResponse().setHttp2ErrorCode(404).setBody("")
+        mockWebServer.enqueue(failedResponse)
 
         activityRule.launchActivity(null)
+
         Thread.sleep(1000)
-        onView(withId(R.id.loading_recycler_view)).check(
-            matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
-        onView(withId(R.id.failed_view)).check(
-            matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
-        onView(withId(R.id.repo_recycler_view)).check(
-            matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+
+        checkFailedResultIsShown()
     }
 
     @Test
@@ -115,25 +86,16 @@ class MainActivityTest {
         mockWebServer.enqueue(successResponse)
 
         activityRule.launchActivity(null)
-        Thread.sleep(1000)
-
-        onView(withId(R.id.loading_recycler_view)).check(
-            matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
-        onView(withId(R.id.failed_view)).check(
-            matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
-        onView(withId(R.id.repo_recycler_view)).check(
-            matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
-
-        onView(withId(R.id.retry_button)).perform(click())
 
         Thread.sleep(1000)
 
-        onView(withId(R.id.loading_recycler_view)).check(
-            matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
-        onView(withId(R.id.failed_view)).check(
-            matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
-        onView(withId(R.id.repo_recycler_view)).check(
-            matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+        checkFailedResultIsShown()
+
+        clickRetryButton()
+
+        Thread.sleep(1000)
+
+        checkSuccessResultIsShown()
     }
 
     @Test
@@ -148,22 +110,51 @@ class MainActivityTest {
 
         Thread.sleep(1000)
 
-        onView(withId(R.id.loading_recycler_view)).check(
-            matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
-        onView(withId(R.id.failed_view)).check(
-            matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
-        onView(withId(R.id.repo_recycler_view)).check(
-            matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+        checkSuccessResultIsShown()
 
-        onView(withId(R.id.repo_recycler_view_container)).perform(swipeDown())
+        swipeOnRepoList()
 
         Thread.sleep(1000)
 
-        onView(withId(R.id.loading_recycler_view)).check(
-            matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
-        onView(withId(R.id.failed_view)).check(
-            matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
-        onView(withId(R.id.repo_recycler_view)).check(
-            matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+        checkFailedResultIsShown()
+    }
+
+    companion object ScreenHelper {
+
+        fun clickRetryButton() {
+            onView(withId(R.id.retry_button)).perform(click())
+        }
+
+        fun swipeOnRepoList() {
+            onView(withId(R.id.repo_recycler_view_container)).perform(swipeDown())
+        }
+
+        fun checkSuccessResultIsShown() {
+            onView(withId(R.id.loading_recycler_view)).check(
+                matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+            onView(withId(R.id.failed_view)).check(
+                matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+            onView(withId(R.id.repo_recycler_view)).check(
+                matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+        }
+
+        fun checkFailedResultIsShown() {
+            onView(withId(R.id.loading_recycler_view)).check(
+                matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+            onView(withId(R.id.failed_view)).check(
+                matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+            onView(withId(R.id.repo_recycler_view)).check(
+                matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+        }
+
+        fun checkLoadingIsShown() {
+            onView(withId(R.id.loading_recycler_view)).check(
+                matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+            onView(withId(R.id.failed_view)).check(
+                matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+            onView(withId(R.id.repo_recycler_view)).check(
+                matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+        }
+
     }
 }
