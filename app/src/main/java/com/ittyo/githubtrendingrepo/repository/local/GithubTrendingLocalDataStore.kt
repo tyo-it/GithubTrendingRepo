@@ -25,14 +25,7 @@ class GithubTrendingLocalDataStore(private val database: TrendingRepoDatabase,
         }
     }
 
-    override suspend fun isTrendingRepoExpired(): Boolean {
-        val timeStamp = sharedPref.getString(LAST_UPDATE_TIME_KEY, "1970-01-01T07:00")
-        val lastUpdateTime = LocalDateTime.parse(timeStamp)
-        val currentTime = LocalDateTime.now()
-        return Duration.between(lastUpdateTime, currentTime).toMinutes() > 120
-    }
-
-    override suspend fun saveTrendingRepo(repos: List<Repo>) {
+    override suspend fun saveTrendingRepo(repos: List<Repo>, currentTime: LocalDateTime) {
         val entities = repos.map {
             TrendingRepoEntity(
                 id = 0,
@@ -47,9 +40,16 @@ class GithubTrendingLocalDataStore(private val database: TrendingRepoDatabase,
             )
         }
         database.trendingRepoDao().insertAll(entities)
+        setTrendingRepoLastUpdate(currentTime)
+    }
 
-        with(sharedPref.edit()) {
-            val currentTime = LocalDateTime.now()
+    override fun getTrendingRepoLastUpdate(): LocalDateTime {
+        val timeString = sharedPref.getString(LAST_UPDATE_TIME_KEY, "1970-01-01T07:00")
+        return LocalDateTime.parse(timeString)
+    }
+
+    private fun setTrendingRepoLastUpdate(currentTime: LocalDateTime) {
+        with (sharedPref.edit()) {
             this.putString(LAST_UPDATE_TIME_KEY, currentTime.toString())
             commit()
         }

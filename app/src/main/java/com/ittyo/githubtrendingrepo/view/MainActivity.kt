@@ -17,6 +17,8 @@ import com.ittyo.githubtrendingrepo.repository.remote.GithubTrendingRemoteDataSt
 import com.ittyo.githubtrendingrepo.repository.remote.GithubTrendingServiceFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.view_placeholder_failed.*
+import org.threeten.bp.Clock
+import org.threeten.bp.ZoneId
 
 class MainActivity : AppCompatActivity() {
 
@@ -103,7 +105,7 @@ class MainActivity : AppCompatActivity() {
                 val database = TrendingRepoDatabase.getInstance(context)
                 val sharedPref = context.getSharedPreferences("repo", Context.MODE_PRIVATE)
                 val localDataStore = GithubTrendingLocalDataStore(database, sharedPref)
-                val repository = GithubTrendingRepository(remote, localDataStore)
+                val repository = GithubTrendingRepository(remote, localDataStore, Clock.systemDefaultZone())
                 return TrendingRepoViewModel(repository) as T
             }
             throw IllegalArgumentException("Unknown ViewModel class")

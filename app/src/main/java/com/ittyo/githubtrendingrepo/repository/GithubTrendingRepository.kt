@@ -1,18 +1,23 @@
 package com.ittyo.githubtrendingrepo.repository
 
+import org.threeten.bp.Clock
+import org.threeten.bp.Duration
+import org.threeten.bp.LocalDateTime
+
 class GithubTrendingRepository(
     private val remote: RemoteDataStore,
-    private val localDataStore: LocalDataStore
+    private val localDataStore: LocalDataStore,
+    private val clock: Clock
 ) {
 
     suspend fun getTrendingRepo(forceFetch: Boolean): Result {
         val cache = localDataStore.getTrendingRepo()
-        val isCacheExpired = localDataStore.isTrendingRepoExpired()
 
-        return if (cache.isEmpty() || isCacheExpired || forceFetch) {
+        return if (forceFetch || cache.isEmpty() || isCacheExpired()) {
             try {
                 val result = remote.fetchTrendingRepo()
-                localDataStore.saveTrendingRepo(result)
+                val currentTime = LocalDateTime.now(clock)
+                localDataStore.saveTrendingRepo(result, currentTime)
                 Result.Success(result)
             } catch (e: Throwable) {
                 Result.Failed(e)
@@ -20,5 +25,11 @@ class GithubTrendingRepository(
         } else {
             Result.Success(cache)
         }
+    }
+
+    private fun isCacheExpired(): Boolean {
+        val lastUpdate = localDataStore.getTrendingRepoLastUpdate()
+        val currentTime = LocalDateTime.now(clock)
+        return Duration.between(lastUpdate, currentTime).toMinutes() > 120
     }
 }
