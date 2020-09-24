@@ -10,9 +10,9 @@ class GithubTrendingRepository(
     private val remote: RemoteDataStore,
     private val localDataStore: LocalDataStore,
     private val clock: Clock
-) {
+): TrendingRepository {
 
-    suspend fun getTrendingRepo(forceFetch: Boolean): Result {
+    override suspend fun getTrendingRepo(forceFetch: Boolean): Result {
         val cache = localDataStore.getTrendingRepo()
 
         return if (forceFetch || cache.isEmpty() || isCacheExpired()) {
