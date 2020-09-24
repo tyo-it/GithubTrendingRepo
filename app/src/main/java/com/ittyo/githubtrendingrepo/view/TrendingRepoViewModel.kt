@@ -3,12 +3,12 @@ package com.ittyo.githubtrendingrepo.view
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ittyo.githubtrendingrepo.repository.GithubTrendingRepository
 import com.ittyo.githubtrendingrepo.repository.Repo
 import com.ittyo.githubtrendingrepo.repository.Result
+import com.ittyo.githubtrendingrepo.repository.TrendingRepository
 import kotlinx.coroutines.launch
 
-class TrendingRepoViewModel(private val repository: GithubTrendingRepository): ViewModel() {
+class TrendingRepoViewModel(private val repository: TrendingRepository): ViewModel() {
 
     val stateLiveData = MutableLiveData<State>()
 
