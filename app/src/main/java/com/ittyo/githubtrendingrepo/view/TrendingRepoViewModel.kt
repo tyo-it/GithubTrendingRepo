@@ -15,8 +15,7 @@ class TrendingRepoViewModel(private val repository: TrendingRepository): ViewMod
     fun loadTrendingRepo(forceFetch: Boolean = false) {
         viewModelScope.launch {
             stateLiveData.value = State.Loading
-            val result = repository.getTrendingRepo(forceFetch)
-            stateLiveData.value = when(result) {
+            stateLiveData.value = when (val result = repository.getTrendingRepo(forceFetch)) {
                 is Result.Success -> State.Success(result.data)
                 is Result.Failed -> State.Failed
             }
