@@ -1,5 +1,7 @@
 package com.ittyo.githubtrendingrepo.repository
 
+import com.ittyo.githubtrendingrepo.repository.local.LocalDataStore
+import com.ittyo.githubtrendingrepo.repository.remote.RemoteDataStore
 import org.threeten.bp.Clock
 import org.threeten.bp.Duration
 import org.threeten.bp.LocalDateTime

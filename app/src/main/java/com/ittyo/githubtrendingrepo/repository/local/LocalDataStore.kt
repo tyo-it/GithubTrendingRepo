@@ -1,5 +1,6 @@
-package com.ittyo.githubtrendingrepo.repository
+package com.ittyo.githubtrendingrepo.repository.local
 
+import com.ittyo.githubtrendingrepo.repository.Repo
 import org.threeten.bp.LocalDateTime
 
 interface LocalDataStore {

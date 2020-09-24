@@ -3,6 +3,8 @@ package com.ittyo.githubtrendingrepo.repository
 import com.ittyo.githubtrendingrepo.TestApp
 import com.ittyo.githubtrendingrepo.createRepo
 import com.ittyo.githubtrendingrepo.initializeClock
+import com.ittyo.githubtrendingrepo.repository.local.LocalDataStore
+import com.ittyo.githubtrendingrepo.repository.remote.RemoteDataStore
 import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals

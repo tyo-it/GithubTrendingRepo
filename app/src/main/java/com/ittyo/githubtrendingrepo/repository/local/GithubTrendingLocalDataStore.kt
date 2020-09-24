@@ -1,7 +1,6 @@
 package com.ittyo.githubtrendingrepo.repository.local
 
 import android.content.SharedPreferences
-import com.ittyo.githubtrendingrepo.repository.LocalDataStore
 import com.ittyo.githubtrendingrepo.repository.Repo
 import org.threeten.bp.*
 
