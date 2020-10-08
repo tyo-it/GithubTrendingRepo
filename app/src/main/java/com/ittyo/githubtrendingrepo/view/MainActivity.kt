@@ -26,7 +26,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private lateinit var viewModel: TrendingRepoViewModel
-
     private val repoAdapter = TrendingRepoAdapter()
     private val loadingAdapter = LoadingRepoAdapter()
 
@@ -58,22 +57,8 @@ class MainActivity : AppCompatActivity() {
         })
 
         setupAppbar()
-
-        val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
-
-        repo_recycler_view.layoutManager = LinearLayoutManager(this)
-        repo_recycler_view.addItemDecoration(divider)
-        repo_recycler_view.adapter = repoAdapter
-
-        loading_recycler_view.layoutManager = LinearLayoutManager(this)
-        loading_recycler_view.addItemDecoration(divider)
-        loading_recycler_view.adapter = loadingAdapter
-        loading_recycler_view.visibility = View.GONE
-
-        repo_recycler_view_container.setOnRefreshListener {
-            viewModel.loadTrendingRepo(forceFetch = true)
-        }
-
+        setupRepoRecyclerView()
+        setupLoadingRecyclerView()
         viewModel.loadTrendingRepo()
     }
 
@@ -91,6 +76,26 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         // we don't need actionbar title because we use textView to show title on the middle
         supportActionBar?.title = ""
+    }
+
+    private fun setupRepoRecyclerView() {
+        val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+
+        repo_recycler_view.layoutManager = LinearLayoutManager(this)
+        repo_recycler_view.addItemDecoration(divider)
+        repo_recycler_view.adapter = repoAdapter
+        repo_recycler_view_container.setOnRefreshListener {
+            viewModel.loadTrendingRepo(forceFetch = true)
+        }
+    }
+
+    private fun setupLoadingRecyclerView() {
+        val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+
+        loading_recycler_view.layoutManager = LinearLayoutManager(this)
+        loading_recycler_view.addItemDecoration(divider)
+        loading_recycler_view.adapter = loadingAdapter
+        loading_recycler_view.visibility = View.GONE
     }
 
     private fun showTrendingReposView() {
