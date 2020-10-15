@@ -5,8 +5,9 @@ import com.ittyo.githubtrendingrepo.repository.remote.RemoteDataStore
 import org.threeten.bp.Clock
 import org.threeten.bp.Duration
 import org.threeten.bp.LocalDateTime
+import javax.inject.Inject
 
-class GithubTrendingRepository(
+class GithubTrendingRepository @Inject constructor(
     private val remote: RemoteDataStore,
     private val localDataStore: LocalDataStore,
     private val clock: Clock

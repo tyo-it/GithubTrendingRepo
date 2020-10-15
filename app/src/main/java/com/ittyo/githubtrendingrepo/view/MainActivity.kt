@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -15,26 +16,24 @@ import com.ittyo.githubtrendingrepo.repository.local.GithubTrendingLocalDataStor
 import com.ittyo.githubtrendingrepo.repository.local.TrendingRepoDatabase
 import com.ittyo.githubtrendingrepo.repository.remote.GithubTrendingRemoteDataStore
 import com.ittyo.githubtrendingrepo.repository.remote.GithubTrendingServiceFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.view_placeholder_failed.*
-import org.threeten.bp.Clock
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     companion object {
         const val EXPAND_POSITION_KEY = "expand_position"
     }
 
-    private lateinit var viewModel: TrendingRepoViewModel
+    private val viewModel by viewModels<TrendingRepoViewModel>()
     private val repoAdapter = TrendingRepoAdapter()
     private val loadingAdapter = LoadingRepoAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        viewModel = ViewModelProvider(this, ViewModelFactory(this))
-            .get(TrendingRepoViewModel::class.java)
 
         viewModel.stateLiveData.observe(this, Observer { state ->
             when (state) {
@@ -118,25 +117,5 @@ class MainActivity : AppCompatActivity() {
         loading_recycler_view.visibility = View.GONE
         repo_recycler_view_container.visibility = View.GONE
         repo_recycler_view_container.isRefreshing = false
-    }
-
-    class ViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(TrendingRepoViewModel::class.java)) {
-                @Suppress("UNCHECKED_CAST")
-                val baseUrl = (context.applicationContext as TrendingRepoApp).getBaseUrl()
-                val githubService =
-                    GithubTrendingServiceFactory.makeGithubService(BuildConfig.DEBUG, baseUrl)
-                val remote = GithubTrendingRemoteDataStore(githubService)
-
-                val database = TrendingRepoDatabase.getInstance(context)
-                val sharedPref = context.getSharedPreferences("repo", Context.MODE_PRIVATE)
-                val localDataStore = GithubTrendingLocalDataStore(database, sharedPref)
-                val repository =
-                    GithubTrendingRepository(remote, localDataStore, Clock.systemDefaultZone())
-                return TrendingRepoViewModel(repository) as T
-            }
-            throw IllegalArgumentException("Unknown ViewModel class")
-        }
     }
 }

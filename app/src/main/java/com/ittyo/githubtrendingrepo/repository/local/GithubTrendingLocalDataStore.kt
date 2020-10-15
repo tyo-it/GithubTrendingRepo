@@ -1,13 +1,15 @@
 package com.ittyo.githubtrendingrepo.repository.local
 
 import android.content.SharedPreferences
+import com.ittyo.githubtrendingrepo.RepoCache
 import com.ittyo.githubtrendingrepo.repository.Repo
 import org.threeten.bp.*
+import javax.inject.Inject
 
 const val LAST_UPDATE_TIME_KEY = "LAST_UPDATE_TIMESTAMP_KEY"
 
-class GithubTrendingLocalDataStore(private val database: TrendingRepoDatabase,
-                                   private val sharedPref: SharedPreferences): LocalDataStore {
+class GithubTrendingLocalDataStore @Inject constructor(private val database: TrendingRepoDatabase,
+                                                       @RepoCache val sharedPref: SharedPreferences): LocalDataStore {
 
     override suspend fun getTrendingRepo(): List<Repo> {
         return database.trendingRepoDao().getTrendingRepo().map {

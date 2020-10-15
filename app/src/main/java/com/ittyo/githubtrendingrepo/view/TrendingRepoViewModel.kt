@@ -1,5 +1,6 @@
 package com.ittyo.githubtrendingrepo.view
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,7 +9,7 @@ import com.ittyo.githubtrendingrepo.repository.Result
 import com.ittyo.githubtrendingrepo.repository.TrendingRepository
 import kotlinx.coroutines.launch
 
-class TrendingRepoViewModel(private val repository: TrendingRepository): ViewModel() {
+class TrendingRepoViewModel @ViewModelInject constructor(private val repository: TrendingRepository): ViewModel() {
 
     val stateLiveData = MutableLiveData<State>()
 

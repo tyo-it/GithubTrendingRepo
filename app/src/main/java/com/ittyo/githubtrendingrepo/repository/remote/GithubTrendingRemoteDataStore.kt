@@ -1,8 +1,9 @@
 package com.ittyo.githubtrendingrepo.repository.remote
 
 import com.ittyo.githubtrendingrepo.repository.Repo
+import javax.inject.Inject
 
-class GithubTrendingRemoteDataStore(private val service: GithubTrendingService): RemoteDataStore {
+class GithubTrendingRemoteDataStore @Inject constructor(private val service: GithubTrendingService): RemoteDataStore {
     override suspend fun fetchTrendingRepo(): List<Repo> {
         return service.getTrendingRepo().map {
             Repo(
